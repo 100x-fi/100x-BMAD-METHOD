@@ -1,0 +1,1578 @@
+template:
+  id: refactor-suggestions-template
+  name: Code Refactor Report
+  version: '2.0'
+  output:
+    format: markdown
+    filename: docs/refactoring/{{slug}}-refactor-report.md
+    title: 'Refactor Report: {{feature_name}}'
+workflow:
+  mode: interactive
+  elicitation: advanced-elicitation
+agent_config:
+  editable_sections:
+  - Appendices
+  - Architecture & Design Refactoring
+  - Change Log
+  - Code Quality Improvements
+  - Conclusion
+  - Context & NFR Targets
+  - Documentation Updates
+  - Evidence & Benchmarks
+  - Executive Summary
+  - Implementation Phases
+  - Implementation Priority Matrix
+  - PRs & ADRs
+  - Performance Optimizations
+  - Risk & Rollback
+  - Security Improvements
+  - Testing Enhancements
+sections:
+- id: header
+  title: Document Header
+  type: template-text
+  template: '# Code Refactor Suggestions: Story {{story_id}} - {{feature_name}}
+
+
+    **Generated:** {{current_date}}
+
+    **Story:** {{story_id}} - {{feature_name}}
+
+    **Status:** {{review_status}}
+
+    **Developer:** {{developer_name}}
+
+
+    ---
+
+    '
+  instruction: Fill in the document header with story information and metadata
+  elicit: true
+  owner: dev-agent
+  editors:
+  - dev-agent
+  - qa-agent
+- id: context-nfr
+  title: Context & NFR Targets
+  instruction: Capture repository context, environment, and the non-functional targets that refactoring will move towards.
+    Do not invent values.
+  type: template-text
+  template: "## 0. Context & NFR Targets\n\n**Repository:** {{repo_url}}\n**Branch:** {{branch_name}}  \n**Commit:** {{commit_sha}}\
+    \  \n**Language / Stack:** {{language}}  \n**CI Run:** {{ci_run_id}} {{ci_url}}\n\n### Proposed NFR Targets (fill or confirm)\n\
+    - Performance (p95 latency): {{target_latency_p95}}\n- Error rate (5xx): {{target_error_rate}}\n- Test coverage (line/branch):\
+    \ {{target_coverage}}\n- Complexity threshold (cyclomatic): {{target_cyclomatic}}\n- Bundle size / binary size: {{target_bundle_size}}\n\
+    - Security policy baseline: {{target_security}}\n\n---\n"
+  elicit: true
+  owner: dev-agent
+  editors:
+  - dev-agent
+  - qa-agent
+  - security
+- id: executive-summary
+  title: Executive Summary
+  instruction: 'Provide a high-level overview of the refactoring analysis including:
+
+    - Overall code quality assessment
+
+    - Key areas for improvement
+
+    - Priority and effort estimates
+
+    - Impact on system quality
+
+    '
+  template: 'This report provides comprehensive refactoring suggestions for the {{feature_name}} implementation (Story {{story_id}}).
+    The codebase demonstrates {{overall_assessment}} with {{key_strengths}}. However, several opportunities for improvement
+    have been identified to enhance {{improvement_areas}}.
+
+
+    **Overall Code Quality Score:** {{quality_score}}/100
+
+
+    ### Key Areas for Improvement
+
+
+    - [ ] **{{category_1}}:** {{description_1}}
+
+    - [ ] **{{category_2}}:** {{description_2}}
+
+    - [ ] **{{category_3}}:** {{description_3}}
+
+    - [ ] **{{category_4}}:** {{description_4}}
+
+
+    ---
+
+    '
+  elicit: true
+  owner: dev-agent
+  editors:
+  - dev-agent
+  - qa-agent
+- id: architecture-design
+  title: Architecture & Design Refactoring
+  instruction: 'Document architectural improvements including:
+
+    - Separation of concerns issues
+
+    - Interface extraction opportunities
+
+    - Design pattern improvements
+
+    - Coupling reduction strategies
+
+    '
+  template: '## 1. Architecture & Design Refactoring
+
+
+    ### 1.1 {{refactor_title}}
+
+
+    **Current Issue:** {{issue_description}}
+
+
+    **Location:** {{file_location}}
+
+
+    **Current Code:**
+
+    ```{{language}}
+
+    {{current_code_block}}
+
+    ```
+
+
+    **Problem:**
+
+    - [ ] {{problem_1}}
+
+    - [ ] {{problem_2}}
+
+    - [ ] {{problem_3}}
+
+
+    **Suggested Refactor:**
+
+
+    {{refactor_description}}
+
+
+    ```{{language}}
+
+    {{refactored_code_block}}
+
+    ```
+
+
+    **Benefits:**
+
+    - [ ] {{benefit_1}}
+
+    - [ ] {{benefit_2}}
+
+    - [ ] {{benefit_3}}
+
+
+    **Priority:** {{priority_level}}
+
+    **Effort:** {{effort_estimate}}
+
+
+    ---
+
+    '
+  elicit: true
+  owner: dev-agent
+  editors:
+  - dev-agent
+- id: code-quality
+  title: Code Quality Improvements
+  instruction: 'Identify code quality issues including:
+
+    - Magic values and constants
+
+    - Code duplication
+
+    - Error handling improvements
+
+    - Naming conventions
+
+    - Code organization
+
+    '
+  template: '## 2. Code Quality Improvements
+
+
+    ### 2.1 {{improvement_title}}
+
+
+    **Issue:** {{issue_description}}
+
+
+    **Location:** {{file_location}}
+
+
+    **Current Implementation:**
+
+    ```{{language}}
+
+    {{current_code}}
+
+    ```
+
+
+    **Suggested Improvement:**
+
+    ```{{language}}
+
+    {{improved_code}}
+
+    ```
+
+
+    **Benefits:**
+
+    - [ ] {{benefit_1}}
+
+    - [ ] {{benefit_2}}
+
+
+    **Priority:** {{priority_level}}
+
+    **Effort:** {{effort_estimate}}
+
+
+    ---
+
+    '
+  elicit: true
+  owner: dev-agent
+  editors:
+  - dev-agent
+- id: performance-optimizations
+  title: Performance Optimizations
+  instruction: 'Document performance improvement opportunities:
+
+    - Memory management
+
+    - Resource lifecycle
+
+    - Query optimization
+
+    - Caching strategies
+
+    - Concurrency improvements
+
+    '
+  template: '## 3. Performance Optimizations
+
+
+    ### 3.1 {{optimization_title}}
+
+
+    **Current Performance Issue:** {{issue_description}}
+
+
+    **Impact:** {{performance_impact}}
+
+
+    **Suggested Solution:**
+
+    ```{{language}}
+
+    {{optimized_code}}
+
+    ```
+
+
+    **Expected Improvement:**
+
+    - [ ] {{improvement_1}}
+
+    - [ ] {{improvement_2}}
+
+
+    **Priority:** {{priority_level}}
+
+    **Effort:** {{effort_estimate}}
+
+
+    ---
+
+    '
+  elicit: true
+  owner: dev-agent
+  editors:
+  - dev-agent
+- id: testing-enhancements
+  title: Testing Enhancements
+  instruction: 'Identify testing improvements:
+
+    - Test coverage gaps
+
+    - Integration test needs
+
+    - Mock strategies
+
+    - Test data management
+
+    - Edge case coverage
+
+    '
+  template: '## 4. Testing Enhancements
+
+
+    ### 4.1 {{test_improvement_title}}
+
+
+    **Current Test Coverage Gap:** {{gap_description}}
+
+
+    **Missing Test Scenarios:**
+
+    - [ ] {{scenario_1}}
+
+    - [ ] {{scenario_2}}
+
+    - [ ] {{scenario_3}}
+
+
+    **Suggested Test Implementation:**
+
+    ```{{language}}
+
+    {{test_code}}
+
+    ```
+
+
+    **Test Strategy:**
+
+    - [ ] {{strategy_1}}
+
+    - [ ] {{strategy_2}}
+
+
+    **Priority:** {{priority_level}}
+
+    **Effort:** {{effort_estimate}}
+
+
+    ---
+
+    '
+  elicit: true
+  owner: dev-agent
+  editors:
+  - dev-agent
+  - qa-agent
+- id: security-improvements
+  title: Security Improvements
+  instruction: 'Document security enhancements:
+
+    - Input validation
+
+    - Authentication/authorization
+
+    - Rate limiting
+
+    - Data protection
+
+    - Vulnerability mitigation
+
+    '
+  template: '## 5. Security Improvements
+
+
+    ### 5.1 {{security_improvement_title}}
+
+
+    **Security Concern:** {{concern_description}}
+
+
+    **Risk Level:** {{risk_level}}
+
+
+    **Current Implementation:**
+
+    ```{{language}}
+
+    {{current_security_code}}
+
+    ```
+
+
+    **Recommended Security Enhancement:**
+
+    ```{{language}}
+
+    {{enhanced_security_code}}
+
+    ```
+
+
+    **Security Benefits:**
+
+    - [ ] {{security_benefit_1}}
+
+    - [ ] {{security_benefit_2}}
+
+
+    **Priority:** {{priority_level}}
+
+    **Effort:** {{effort_estimate}}
+
+
+    ---
+
+    '
+  elicit: true
+  owner: dev-agent
+  editors:
+  - dev-agent
+  - qa-agent
+- id: documentation-updates
+  title: Documentation Updates
+  instruction: 'Identify documentation needs:
+
+    - API documentation
+
+    - Code comments
+
+    - Architecture Decision Records (ADRs)
+
+    - User guides
+
+    - Developer documentation
+
+    '
+  template: '## 6. Documentation Updates
+
+
+    ### 6.1 {{doc_improvement_title}}
+
+
+    **Documentation Gap:** {{gap_description}}
+
+
+    **Required Documentation:**
+
+    - [ ] {{doc_type_1}}: {{description_1}}
+
+    - [ ] {{doc_type_2}}: {{description_2}}
+
+
+    **Suggested Documentation Structure:**
+
+    ```markdown
+
+    {{doc_template}}
+
+    ```
+
+
+    **Priority:** {{priority_level}}
+
+    **Effort:** {{effort_estimate}}
+
+
+    ---
+
+    '
+  elicit: true
+  owner: dev-agent
+  editors:
+  - dev-agent
+- id: implementation-priority-matrix
+  title: Implementation Priority Matrix
+  instruction: 'Create a priority matrix table organizing all refactoring items by:
+
+    - Priority level (HIGH/MEDIUM/LOW)
+
+    - Category (Architecture, Code Quality, Performance, Testing, Security, Documentation)
+
+    - Effort estimate
+
+    - Item description
+
+    - Impact assessment
+
+    '
+  template: "## 7. Implementation Priority Matrix\n\n| Priority | Category          | Effort | Item                      \
+    \                     | Impact  | Confidence | Score |\n| -------- | ----------------- | ------ | ----------------------------------------------\
+    \ | ------- | ---------- | ----- |\n| {'{priority_1}'}     | {'{category_1}'}      | {'{effort_1}'}    | {'{item_1}'}\
+    \                   | {'{impact_1}'}    | {'{confidence_1}'} | {'{score_1}'} |\n| {'{priority_2}'}     | {'{category_2}'}\
+    \      | {'{effort_2}'}    | {'{item_2}'}                   | {'{impact_2}'}    | {'{confidence_2}'} | {'{score_2}'} |\n\
+    | {'{priority_3}'}     | {'{category_3}'}      | {'{effort_3}'}    | {'{item_3}'}                   | {'{impact_3}'} \
+    \   | {'{confidence_3}'} | {'{score_3}'} |\n| {'{priority_4}'}     | {'{category_4}'}      | {'{effort_4}'}    | {'{item_4}'}\
+    \                   | {'{impact_4}'}    | {'{confidence_4}'} | {'{score_4}'} |\n| {'{priority_5}'}     | {'{category_5}'}\
+    \      | {'{effort_5}'}    | {'{item_5}'}                   | {'{impact_5}'}    | {'{confidence_5}'} | {'{score_5}'} |\n\
+    | {'{priority_6}'}     | {'{category_6}'}      | {'{effort_6}'}    | {'{item_6}'}                   | {'{impact_6}'} \
+    \   | {'{confidence_6}'} | {'{score_6}'} |\n| {'{priority_7}'}     | {'{category_7}'}      | {'{effort_7}'}    | {'{item_7}'}\
+    \                   | {'{impact_7}'}    | {'{confidence_7}'} | {'{score_7}'} |\n| {'{priority_8}'}     | {'{category_8}'}\
+    \      | {'{effort_8}'}    | {'{item_8}'}                   | {'{impact_8}'}    | {'{confidence_8}'} | {'{score_8}'} |\n\
+    | {'{priority_9}'}     | {'{category_9}'}      | {'{effort_9}'}    | {'{item_9}'}                   | {'{impact_9}'} \
+    \   | {'{confidence_9}'} | {'{score_9}'} |\n| {'{priority_10}'}     | {'{category_10}'}      | {'{effort_10}'}    | {'{item_10}'}\
+    \                   | {'{impact_10}'}    | {'{confidence_10}'} | {'{score_10}'} |\n\n**Scoring model:** Score = ((ImpactScore\
+    \ + RiskReduction + Maintainability + Reliability + Performance + Security) \xD7 Confidence) / Effort. Fill `Confidence`\
+    \ as 0.1\u20131.0; `Effort` in ideal days or hours, normalized.\n\n---\n"
+  elicit: true
+  owner: dev-agent
+  editors:
+  - dev-agent
+  - scrum-master
+- id: implementation-phases
+  title: Implementation Phases
+  instruction: 'Organize refactoring work into phases based on the priority matrix:
+
+    - Phase 1: Critical fixes (HIGH priority items)
+
+    - Phase 2: Important improvements (MEDIUM priority items)
+
+    - Phase 3: Quality enhancements (LOW priority items)
+
+    - Phase 4: Future optimizations (Nice-to-have items)
+
+    '
+  template: '## 8. Recommended Refactoring Roadmap
+
+
+    ### Phase 1: Critical Fixes ({{phase1_effort}} hours)
+
+    {{phase1_items}}
+
+
+    **Deliverables:**
+
+    - [ ] {{phase1_deliverable_1}}
+
+    - [ ] {{phase1_deliverable_2}}
+
+    - [ ] {{phase1_deliverable_3}}
+
+
+    ### Phase 2: Code Quality ({{phase2_effort}} hours)
+
+    {{phase2_items}}
+
+
+    **Deliverables:**
+
+    - [ ] {{phase2_deliverable_1}}
+
+    - [ ] {{phase2_deliverable_2}}
+
+    - [ ] {{phase2_deliverable_3}}
+
+
+    ### Phase 3: Security & Observability ({{phase3_effort}} hours)
+
+    {{phase3_items}}
+
+
+    **Deliverables:**
+
+    - [ ] {{phase3_deliverable_1}}
+
+    - [ ] {{phase3_deliverable_2}}
+
+    - [ ] {{phase3_deliverable_3}}
+
+
+    ### Phase 4: Future Optimizations ({{phase4_effort}} hours)
+
+    {{phase4_items}}
+
+
+    **Deliverables:**
+
+    - [ ] {{phase4_deliverable_1}}
+
+    - [ ] {{phase4_deliverable_2}}
+
+    - [ ] {{phase4_deliverable_3}}
+
+
+    **Total Estimated Effort:** {{total_effort}} hours
+
+
+    ---
+
+    '
+  elicit: true
+  owner: dev-agent
+  editors:
+  - dev-agent
+  - scrum-master
+- id: monitoring-observability
+  title: Monitoring & Observability
+  instruction: 'Document monitoring and observability improvements:
+
+    - Metrics to track
+
+    - Logging enhancements
+
+    - Alerting strategies
+
+    - Dashboard requirements
+
+    '
+  template: '## 9. Monitoring & Observability
+
+
+    ### 9.1 {{monitoring_title}}
+
+
+    **Current Monitoring Gap:** {{gap_description}}
+
+
+    **Recommended Metrics:**
+
+    - [ ] {{metric_1}}: {{description_1}}
+
+    - [ ] {{metric_2}}: {{description_2}}
+
+
+    **Logging Improvements:**
+
+    ```{{language}}
+
+    {{logging_code}}
+
+    ```
+
+
+    **Dashboard Requirements:**
+
+    - [ ] {{dashboard_section_1}}
+
+    - [ ] {{dashboard_section_2}}
+
+
+    **Priority:** {{priority_level}}
+
+    **Effort:** {{effort_estimate}}
+
+
+    ---
+
+    '
+  elicit: true
+  owner: dev-agent
+  editors:
+  - dev-agent
+  - qa-agent
+- id: prs-adrs
+  title: PRs & ADRs
+  instruction: Link to concrete PRs and ADRs created as part of the refactor proposal/execution. Use slugified, path-safe
+    identifiers.
+  type: template-text
+  template: "## 11. Pull Requests & ADRs\n\n### Pull Requests\n- PR #{{pr_1_id}}: {{pr_1_title}} \u2014 {{pr_1_url}} (branch:\
+    \ {{pr_1_branch}})\n- PR #{{pr_2_id}}: {{pr_2_title}} \u2014 {{pr_2_url}} (branch: {{pr_2_branch}})\n- PR #{{pr_3_id}}:\
+    \ {{pr_3_title}} \u2014 {{pr_3_url}} (branch: {{pr_3_branch}})\n\n### Architecture Decision Records\n- ADR-{{adr_1_id}}:\
+    \ {{adr_1_title}} \u2014 {{adr_1_url}}\n- ADR-{{adr_2_id}}: {{adr_2_title}} \u2014 {{adr_2_url}}\n- ADR-{{adr_3_id}}:\
+    \ {{adr_3_title}} \u2014 {{adr_3_url}}\n\n---\n"
+  elicit: true
+  owner: dev-agent
+  editors:
+  - dev-agent
+  - tech-lead
+- id: evidence-benchmarks
+  title: Evidence & Benchmarks
+  instruction: Record before/after metrics, test results, and any artifacts that demonstrate the effect of the refactor.
+  type: template-text
+  template: "## 12. Evidence & Benchmarks\n\n**Environment:** {{bench_env}}  \n**Commands:** lint `{{lint_cmd}}` \u2022 test\
+    \ `{{test_cmd}}` \u2022 build `{{build_cmd}}` \u2022 bench `{{bench_cmd}}`\n\n### Performance\n| Case | Before | After\
+    \ | \u0394 |\n|------|--------|-------|---|\n| {{bench_case_1_name}} | {{bench_case_1_before}} | {{bench_case_1_after}}\
+    \ | {{bench_case_1_delta}} |\n| {{bench_case_2_name}} | {{bench_case_2_before}} | {{bench_case_2_after}} | {{bench_case_2_delta}}\
+    \ |\n| {{bench_case_3_name}} | {{bench_case_3_before}} | {{bench_case_3_after}} | {{bench_case_3_delta}} |\n| {{bench_case_4_name}}\
+    \ | {{bench_case_4_before}} | {{bench_case_4_after}} | {{bench_case_4_delta}} |\n| {{bench_case_5_name}} | {{bench_case_5_before}}\
+    \ | {{bench_case_5_after}} | {{bench_case_5_delta}} |\n\n### Code Quality\n- Coverage: {{coverage_before}} \u2192 {{coverage_after}}\n\
+    - Lint errors: {{lint_errors_before}} \u2192 {{lint_errors_after}}\n- Static analysis findings: {{static_findings_before}}\
+    \ \u2192 {{static_findings_after}}\n- Bundle/Binary size: {{bundle_size_before}} \u2192 {{bundle_size_after}}\n\n### Notes\
+    \ & Attachments\n- {{evidence_note_1}}\n- {{evidence_note_2}}\n\n---\n"
+  elicit: true
+  owner: dev-agent
+  editors:
+  - dev-agent
+  - qa-agent
+- id: risk-rollback
+  title: Risk & Rollback
+  instruction: Identify risks and a safe rollback plan, including owners.
+  type: template-text
+  template: '## 13. Risk & Rollback
+
+
+    **Risks**
+
+    - [ ] {{risk_1}}
+
+    - [ ] {{risk_2}}
+
+    - [ ] {{risk_3}}
+
+
+    **Rollback Plan**
+
+    {{rollback_plan}}
+
+
+    **Ownership**
+
+    - Engineering Owner: {{owner_engineer}}
+
+    - Reviewer/Approver: {{owner_reviewer}}
+
+
+    ---
+
+    '
+  elicit: true
+  owner: dev-agent
+  editors:
+  - dev-agent
+  - tech-lead
+  - qa-agent
+- id: change-log
+  title: Change Log
+  instruction: Summarize the changes made relative to the baseline commit.
+  type: template-text
+  template: '## 14. Change Log
+
+
+    {{change_log}}
+
+
+    ---
+
+    '
+  elicit: true
+  owner: dev-agent
+  editors:
+  - dev-agent
+- id: conclusion
+  title: Conclusion
+  instruction: 'Provide a comprehensive conclusion including:
+
+    - Summary of key improvements
+
+    - Impact assessment
+
+    - Implementation recommendations
+
+    - Next steps
+
+    '
+  template: '## 10. Conclusion
+
+
+    The {{feature_name}} implementation demonstrates {{overall_assessment}} with {{key_strengths}}. The suggested refactorings
+    will enhance:
+
+
+    - [ ] **{{improvement_category_1}}**: {{description_1}}
+
+    - [ ] **{{improvement_category_2}}**: {{description_2}}
+
+    - [ ] **{{improvement_category_3}}**: {{description_3}}
+
+    - [ ] **{{improvement_category_4}}**: {{description_4}}
+
+
+    **Recommended Action:** {{recommended_action}}
+
+
+    **Estimated Total Effort:** {{total_effort}} hours (approximately {{sprint_estimate}})
+
+
+    ---
+
+    '
+  elicit: true
+  owner: dev-agent
+  editors:
+  - dev-agent
+  - qa-agent
+- id: appendices
+  title: Appendices
+  instruction: 'Include supporting information:
+
+    - Code style guidelines
+
+    - Related documentation references
+
+    - Tools and frameworks
+
+    - Additional resources
+
+    '
+  template: '## Appendix A: Code Style Guidelines
+
+
+    Based on the existing codebase, maintain these conventions:
+
+
+    {{style_guidelines}}
+
+
+    ---
+
+
+    ## Appendix B: Related Documentation
+
+
+    - Architecture: {{architecture_doc}}
+
+    - Database Schema: {{database_doc}}
+
+    - API Specification: {{api_doc}}
+
+    - Testing Strategy: {{testing_doc}}
+
+    - QA Gate: {{qa_gate_doc}}
+
+    - Risk Assessment: {{risk_doc}}
+
+    - NFR Assessment: {{nfr_doc}}
+
+
+    ---
+
+
+    **Report Generated By:** {{developer_name}} ({{developer_role}})
+
+    **Review Status:** {{review_status}}
+
+    **Next Actions:** {{next_actions}}
+
+    '
+  elicit: true
+  owner: dev-agent
+  editors:
+  - dev-agent
+  - qa-agent
+variables:
+  story_id:
+    type: string
+    description: Story identifier (e.g., 2.2)
+    required: true
+  feature_name:
+    type: string
+    description: Feature or component name
+    required: true
+  current_date:
+    type: string
+    description: Current date in YYYY-MM-DD format
+    default: '{{current_date}}'
+    required: true
+  review_status:
+    type: choice
+    choices:
+    - Draft
+    - Ready for Review
+    - Under Review
+    - Approved
+    default: Ready for Review
+  developer_name:
+    type: string
+    description: Name of the developer generating the report
+    default: Developer
+    required: true
+  developer_role:
+    type: string
+    description: Role of the developer
+    default: Full Stack Developer
+  language:
+    type: choice
+    choices:
+    - go
+    - javascript
+    - typescript
+    - python
+    - java
+    - csharp
+    - rust
+    default: go
+    required: true
+  priority_level:
+    type: choice
+    choices:
+    - LOW
+    - MEDIUM
+    - HIGH
+    - CRITICAL
+    default: MEDIUM
+  effort_estimate:
+    type: string
+    description: Estimated effort (e.g., 1-2 hours, 1 day, 2-3 days)
+    default: 1-2 hours
+  risk_level:
+    type: choice
+    choices:
+    - LOW
+    - MEDIUM
+    - HIGH
+    - CRITICAL
+    default: MEDIUM
+  priority_1:
+    type: choice
+    choices:
+    - HIGH
+    - MEDIUM
+    - LOW
+    default: HIGH
+  category_1:
+    type: choice
+    choices:
+    - Architecture
+    - Code Quality
+    - Performance
+    - Testing
+    - Security
+    - Documentation
+    default: Architecture
+  item_1:
+    type: string
+    description: Refactoring item description
+    default: Move bot initialization to usecase
+  impact_1:
+    type: choice
+    choices:
+    - High
+    - Medium
+    - Low
+    default: High
+  priority_2:
+    type: choice
+    choices:
+    - HIGH
+    - MEDIUM
+    - LOW
+    default: HIGH
+  category_2:
+    type: choice
+    choices:
+    - Architecture
+    - Code Quality
+    - Performance
+    - Testing
+    - Security
+    - Documentation
+    default: Architecture
+  item_2:
+    type: string
+    description: Refactoring item description
+    default: Extract BotManager interface
+  impact_2:
+    type: choice
+    choices:
+    - High
+    - Medium
+    - Low
+    default: High
+  phase1_items:
+    type: text
+    description: List of Phase 1 items with effort estimates
+    default: '1. Move bot initialization to usecase (1.1) - 2 hours
+
+      2. Extract BotManager interface (1.2) - 6 hours
+
+      3. Implement bot eviction strategy (3.1) - 8 hours
+
+      4. Add integration tests (4.1) - 10 hours'
+  phase1_deliverable_1:
+    type: string
+    description: Phase 1 deliverable
+    default: Proper separation of concerns
+  phase1_deliverable_2:
+    type: string
+    description: Phase 1 deliverable
+    default: Memory leak prevention
+  phase1_deliverable_3:
+    type: string
+    description: Phase 1 deliverable
+    default: QA requirements met
+  phase1_effort:
+    type: string
+    description: Phase 1 total effort
+    default: ~20 hours
+  phase2_items:
+    type: text
+    description: List of Phase 2 items with effort estimates
+    default: '1. Extract magic values (2.1) - 3 hours
+
+      2. Configuration consolidation (1.3) - 2 hours
+
+      3. Reduce test duplication (2.3) - 4 hours
+
+      4. Database query optimization (3.2) - 1 hour
+
+      5. Add unit tests for edge cases (4.2) - 5 hours'
+  phase2_deliverable_1:
+    type: string
+    description: Phase 2 deliverable
+    default: Cleaner, more maintainable code
+  phase2_deliverable_2:
+    type: string
+    description: Phase 2 deliverable
+    default: Better test coverage
+  phase2_deliverable_3:
+    type: string
+    description: Phase 2 deliverable
+    default: Performance improvements
+  phase2_effort:
+    type: string
+    description: Phase 2 total effort
+    default: ~15 hours
+  phase3_items:
+    type: text
+    description: List of Phase 3 items with effort estimates
+    default: '1. Add request rate limiting (5.1) - 5 hours
+
+      2. Add correlation ID logging (5.2) - 4 hours
+
+      3. Error message standardization (2.2) - 4 hours'
+  phase3_deliverable_1:
+    type: string
+    description: Phase 3 deliverable
+    default: Better security posture
+  phase3_deliverable_2:
+    type: string
+    description: Phase 3 deliverable
+    default: Improved debugging capabilities
+  phase3_deliverable_3:
+    type: string
+    description: Phase 3 deliverable
+    default: Standardized error handling
+  phase3_effort:
+    type: string
+    description: Phase 3 total effort
+    default: ~10 hours
+  phase4_items:
+    type: text
+    description: List of Phase 4 items with effort estimates
+    default: '1. Add performance benchmarks (4.3) - 3 hours
+
+      2. Add Godoc comments (6.1) - 2 hours
+
+      3. Add ADR documentation (6.2) - 2 hours'
+  phase4_deliverable_1:
+    type: string
+    description: Phase 4 deliverable
+    default: Performance monitoring
+  phase4_deliverable_2:
+    type: string
+    description: Phase 4 deliverable
+    default: Complete documentation
+  phase4_deliverable_3:
+    type: string
+    description: Phase 4 deliverable
+    default: Architecture decision records
+  phase4_effort:
+    type: string
+    description: Phase 4 total effort
+    default: ~7 hours
+  total_effort:
+    type: string
+    description: Total estimated effort across all phases
+    default: ~53 hours (approximately 1.5 sprint)
+  slug:
+    type: string
+    description: Path-safe slug for output filename (lowercase, hyphenated; derived from story_id and feature_name).
+    required: true
+  repo_url:
+    type: string
+    description: Repository URL or monorepo path (e.g., https://github.com/org/repo or //src/service).
+  branch_name:
+    type: string
+    description: Working branch name for this refactor.
+  commit_sha:
+    type: string
+    description: Baseline commit SHA used for analysis (short or full).
+  ci_run_id:
+    type: string
+    description: CI run/build identifier for evidence, if applicable.
+  ci_url:
+    type: string
+    description: Link to CI run details, if available.
+  target_latency_p95:
+    type: string
+    description: "Target p95 latency (e.g., \u2264 250ms)."
+    default: TBD
+  target_error_rate:
+    type: string
+    description: "Target error rate (e.g., \u2264 0.1%)."
+    default: TBD
+  target_coverage:
+    type: string
+    description: "Target test coverage threshold (e.g., \u2265 80% line, \u2265 70% branch)."
+    default: TBD
+  target_cyclomatic:
+    type: string
+    description: "Target cyclomatic complexity threshold (e.g., \u2264 10)."
+    default: TBD
+  target_bundle_size:
+    type: string
+    description: "Target bundle/binary size budget (e.g., \u2264 250KB gzip)."
+    default: TBD
+  target_security:
+    type: string
+    description: Target security baseline (e.g., no Critical/High CVEs; no secrets).
+    default: TBD
+  pr_1_id:
+    type: string
+    description: Pull request 1 identifier/number.
+  pr_1_title:
+    type: string
+    description: Pull request 1 title.
+  pr_1_url:
+    type: string
+    description: Pull request 1 URL.
+  pr_1_branch:
+    type: string
+    description: Pull request 1 branch name.
+  pr_2_id:
+    type: string
+    description: Pull request 2 identifier/number.
+  pr_2_title:
+    type: string
+    description: Pull request 2 title.
+  pr_2_url:
+    type: string
+    description: Pull request 2 URL.
+  pr_2_branch:
+    type: string
+    description: Pull request 2 branch name.
+  pr_3_id:
+    type: string
+    description: Pull request 3 identifier/number.
+  pr_3_title:
+    type: string
+    description: Pull request 3 title.
+  pr_3_url:
+    type: string
+    description: Pull request 3 URL.
+  pr_3_branch:
+    type: string
+    description: Pull request 3 branch name.
+  adr_1_id:
+    type: string
+    description: ADR 1 identifier number.
+  adr_1_title:
+    type: string
+    description: ADR 1 title.
+  adr_1_url:
+    type: string
+    description: ADR 1 link.
+  adr_2_id:
+    type: string
+    description: ADR 2 identifier number.
+  adr_2_title:
+    type: string
+    description: ADR 2 title.
+  adr_2_url:
+    type: string
+    description: ADR 2 link.
+  adr_3_id:
+    type: string
+    description: ADR 3 identifier number.
+  adr_3_title:
+    type: string
+    description: ADR 3 title.
+  adr_3_url:
+    type: string
+    description: ADR 3 link.
+  bench_env:
+    type: string
+    description: Benchmark environment description (machine, OS, CPU, RAM).
+  lint_cmd:
+    type: string
+    description: Command used to run linters.
+  test_cmd:
+    type: string
+    description: Command used to run tests.
+  build_cmd:
+    type: string
+    description: Command used to build artifacts.
+  bench_cmd:
+    type: string
+    description: Command used to run benchmarks.
+  bench_case_1_name:
+    type: string
+    description: Benchmark case 1 name.
+  bench_case_1_before:
+    type: string
+    description: Benchmark case 1 baseline measurement.
+  bench_case_1_after:
+    type: string
+    description: Benchmark case 1 measurement after refactor.
+  bench_case_1_delta:
+    type: string
+    description: Benchmark case 1 delta/percentage change.
+  bench_case_2_name:
+    type: string
+    description: Benchmark case 2 name.
+  bench_case_2_before:
+    type: string
+    description: Benchmark case 2 baseline measurement.
+  bench_case_2_after:
+    type: string
+    description: Benchmark case 2 measurement after refactor.
+  bench_case_2_delta:
+    type: string
+    description: Benchmark case 2 delta/percentage change.
+  bench_case_3_name:
+    type: string
+    description: Benchmark case 3 name.
+  bench_case_3_before:
+    type: string
+    description: Benchmark case 3 baseline measurement.
+  bench_case_3_after:
+    type: string
+    description: Benchmark case 3 measurement after refactor.
+  bench_case_3_delta:
+    type: string
+    description: Benchmark case 3 delta/percentage change.
+  bench_case_4_name:
+    type: string
+    description: Benchmark case 4 name.
+  bench_case_4_before:
+    type: string
+    description: Benchmark case 4 baseline measurement.
+  bench_case_4_after:
+    type: string
+    description: Benchmark case 4 measurement after refactor.
+  bench_case_4_delta:
+    type: string
+    description: Benchmark case 4 delta/percentage change.
+  bench_case_5_name:
+    type: string
+    description: Benchmark case 5 name.
+  bench_case_5_before:
+    type: string
+    description: Benchmark case 5 baseline measurement.
+  bench_case_5_after:
+    type: string
+    description: Benchmark case 5 measurement after refactor.
+  bench_case_5_delta:
+    type: string
+    description: Benchmark case 5 delta/percentage change.
+  coverage_before:
+    type: string
+    description: Test coverage before refactor.
+  coverage_after:
+    type: string
+    description: Test coverage after refactor.
+  lint_errors_before:
+    type: string
+    description: Lint error count before refactor.
+  lint_errors_after:
+    type: string
+    description: Lint error count after refactor.
+  static_findings_before:
+    type: string
+    description: Static analysis findings before refactor.
+  static_findings_after:
+    type: string
+    description: Static analysis findings after refactor.
+  bundle_size_before:
+    type: string
+    description: Bundle/binary size before refactor.
+  bundle_size_after:
+    type: string
+    description: Bundle/binary size after refactor.
+  evidence_note_1:
+    type: string
+    description: Additional note or attachment reference.
+  evidence_note_2:
+    type: string
+    description: Additional note or attachment reference.
+  risk_1:
+    type: string
+    description: Identified risk item 1.
+  risk_2:
+    type: string
+    description: Identified risk item 2.
+  risk_3:
+    type: string
+    description: Identified risk item 3.
+  rollback_plan:
+    type: string
+    description: Rollback plan steps and conditions.
+  owner_engineer:
+    type: string
+    description: Primary engineering owner.
+  owner_reviewer:
+    type: string
+    description: Reviewer/approver.
+  change_log:
+    type: string
+    description: Summary of changes relative to the baseline commit.
+  confidence_1:
+    type: string
+    description: "Confidence level for item 1 (0.1\u20131.0)."
+  score_1:
+    type: string
+    description: Priority score for item 1, computed per scoring model.
+  confidence_2:
+    type: string
+    description: "Confidence level for item 2 (0.1\u20131.0)."
+  score_2:
+    type: string
+    description: Priority score for item 2, computed per scoring model.
+  confidence_3:
+    type: string
+    description: "Confidence level for item 3 (0.1\u20131.0)."
+  score_3:
+    type: string
+    description: Priority score for item 3, computed per scoring model.
+  confidence_4:
+    type: string
+    description: "Confidence level for item 4 (0.1\u20131.0)."
+  score_4:
+    type: string
+    description: Priority score for item 4, computed per scoring model.
+  confidence_5:
+    type: string
+    description: "Confidence level for item 5 (0.1\u20131.0)."
+  score_5:
+    type: string
+    description: Priority score for item 5, computed per scoring model.
+  confidence_6:
+    type: string
+    description: "Confidence level for item 6 (0.1\u20131.0)."
+  score_6:
+    type: string
+    description: Priority score for item 6, computed per scoring model.
+  confidence_7:
+    type: string
+    description: "Confidence level for item 7 (0.1\u20131.0)."
+  score_7:
+    type: string
+    description: Priority score for item 7, computed per scoring model.
+  confidence_8:
+    type: string
+    description: "Confidence level for item 8 (0.1\u20131.0)."
+  score_8:
+    type: string
+    description: Priority score for item 8, computed per scoring model.
+  confidence_9:
+    type: string
+    description: "Confidence level for item 9 (0.1\u20131.0)."
+  score_9:
+    type: string
+    description: Priority score for item 9, computed per scoring model.
+  confidence_10:
+    type: string
+    description: "Confidence level for item 10 (0.1\u20131.0)."
+  score_10:
+    type: string
+    description: Priority score for item 10, computed per scoring model.
+  api_doc:
+    type: string
+    description: Link or path to the referenced document.
+  architecture_doc:
+    type: string
+    description: Link or path to the referenced document.
+  benefit_1:
+    type: string
+    description: Benefit bullet 1 for the change.
+  benefit_2:
+    type: string
+    description: Benefit bullet 2 for the change.
+  benefit_3:
+    type: string
+    description: Benefit bullet 3 for the change.
+  category_3:
+    type: string
+    description: Category label 3.
+  category_4:
+    type: string
+    description: Category label 4.
+  concern_description:
+    type: string
+    description: Free-text description.
+  current_code:
+    type: string
+    description: Current code snippet.
+  current_code_block:
+    type: string
+    description: Current code snippet.
+  current_security_code:
+    type: string
+    description: Current code snippet.
+  dashboard_section_1:
+    type: string
+    description: Dashboard requirements subsection.
+  dashboard_section_2:
+    type: string
+    description: Dashboard requirements subsection.
+  database_doc:
+    type: string
+    description: Link or path to the referenced document.
+  description_1:
+    type: string
+    description: Value for template placeholder.
+  description_2:
+    type: string
+    description: Value for template placeholder.
+  description_3:
+    type: string
+    description: Value for template placeholder.
+  description_4:
+    type: string
+    description: Value for template placeholder.
+  doc_improvement_title:
+    type: string
+    description: Free-text description.
+  doc_template:
+    type: string
+    description: Proposed code/documentation snippet.
+  doc_type_1:
+    type: string
+    description: Documentation artifact type.
+  doc_type_2:
+    type: string
+    description: Documentation artifact type.
+  enhanced_security_code:
+    type: string
+    description: Proposed code/documentation snippet.
+  file_location:
+    type: string
+    description: Relative file path and line range.
+  gap_description:
+    type: string
+    description: Free-text description.
+  improved_code:
+    type: string
+    description: Proposed code/documentation snippet.
+  improvement_1:
+    type: string
+    description: Value for template placeholder.
+  improvement_2:
+    type: string
+    description: Value for template placeholder.
+  improvement_areas:
+    type: string
+    description: Comma-separated high-level areas of improvement.
+  improvement_category_1:
+    type: string
+    description: Value for template placeholder.
+  improvement_category_2:
+    type: string
+    description: Value for template placeholder.
+  improvement_category_3:
+    type: string
+    description: Value for template placeholder.
+  improvement_category_4:
+    type: string
+    description: Value for template placeholder.
+  improvement_title:
+    type: string
+    description: Value for template placeholder.
+  issue_description:
+    type: string
+    description: Free-text description.
+  key_strengths:
+    type: string
+    description: Free-text description.
+  logging_code:
+    type: string
+    description: Proposed code/documentation snippet.
+  metric_1:
+    type: string
+    description: Monitoring/observability metric description.
+  metric_2:
+    type: string
+    description: Monitoring/observability metric description.
+  monitoring_title:
+    type: string
+    description: Free-text description.
+  next_actions:
+    type: string
+    description: Free-text description.
+  nfr_doc:
+    type: string
+    description: Link or path to the referenced document.
+  optimization_title:
+    type: string
+    description: Free-text description.
+  optimized_code:
+    type: string
+    description: Proposed code/documentation snippet.
+  overall_assessment:
+    type: string
+    description: Free-text description.
+  performance_impact:
+    type: string
+    description: Free-text description.
+  problem_1:
+    type: string
+    description: Problem bullet 1 describing the issue.
+  problem_2:
+    type: string
+    description: Problem bullet 2 describing the issue.
+  problem_3:
+    type: string
+    description: Problem bullet 3 describing the issue.
+  qa_gate_doc:
+    type: string
+    description: Link or path to the referenced document.
+  quality_score:
+    type: string
+    description: "Overall code quality score (0\u2013100)."
+  recommended_action:
+    type: string
+    description: Free-text description.
+  refactor_description:
+    type: string
+    description: Free-text description.
+  refactor_title:
+    type: string
+    description: Value for template placeholder.
+  refactored_code_block:
+    type: string
+    description: Proposed code/documentation snippet.
+  risk_doc:
+    type: string
+    description: Link or path to the referenced document.
+  scenario_1:
+    type: string
+    description: Missing test scenario 1.
+  scenario_2:
+    type: string
+    description: Missing test scenario 2.
+  scenario_3:
+    type: string
+    description: Missing test scenario 3.
+  security_benefit_1:
+    type: string
+    description: Value for template placeholder.
+  security_benefit_2:
+    type: string
+    description: Value for template placeholder.
+  security_improvement_title:
+    type: string
+    description: Free-text description.
+  sprint_estimate:
+    type: string
+    description: Approximate sprint equivalent for total effort.
+  strategy_1:
+    type: string
+    description: Value for template placeholder.
+  strategy_2:
+    type: string
+    description: Value for template placeholder.
+  style_guidelines:
+    type: string
+    description: Bullet list of style conventions to follow.
+  test_code:
+    type: string
+    description: Proposed code/documentation snippet.
+  test_improvement_title:
+    type: string
+    description: Free-text description.
+  testing_doc:
+    type: string
+    description: Link or path to the referenced document.

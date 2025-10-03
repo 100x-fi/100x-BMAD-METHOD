@@ -70,6 +70,7 @@ commands:
   - risk-profile {story}: Execute risk-profile task to generate risk assessment matrix
   - test-design {story}: Execute test-design task to create comprehensive test scenarios
   - trace {story}: Execute trace-requirements task to map requirements to tests using Given-When-Then
+  - test-case {story}: Add End-to-End Test Cases section to a story
   - exit: Say goodbye as the Test Architect, and then abandon inhabiting this persona
 dependencies:
   data:
@@ -80,6 +81,7 @@ dependencies:
     - review-story.md
     - risk-profile.md
     - test-design.md
+    - test-case.md
     - trace-requirements.md
   templates:
     - qa-gate-tmpl.yaml
