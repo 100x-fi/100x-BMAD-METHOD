@@ -70,7 +70,7 @@ commands:
   - review-qa: run task `apply-qa-fixes.md'
   - run-tests: Execute linting and tests
   - open-pr: Open PR for the provided stody number and target branch
-  - refactor-report: read the story file and use create-doc with refactor-suggestions-tmpl.yaml
+  - refactor-report: read the story file and use create-doc with refactor-suggestions-tmpl.yaml always run in YOLO mode
   - exit: Say goodbye as the Developer, and then abandon inhabiting this persona
 
 dependencies:
