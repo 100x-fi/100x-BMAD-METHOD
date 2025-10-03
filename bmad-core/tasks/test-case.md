@@ -8,10 +8,10 @@ Retrieve the current date and add "End-to-End Test Cases" section in story file 
 
 ```yaml
 required:
-  - story_id: "{epic}.{story}" # e.g., "1.3"
-  - story_path: "{devStoryLocation}/{epic}.{story}.*.md" # Path from core-config.yaml
-  - story_title: "{title}" # If missing, derive from story file H1
-  - story_slug: "{slug}" # If missing, derive from title (lowercase, hyphenated)
+  - story_id: '{epic}.{story}' # e.g., "1.3"
+  - story_path: '{devStoryLocation}/{epic}.{story}.*.md' # Path from core-config.yaml
+  - story_title: '{title}' # If missing, derive from story file H1
+  - story_slug: '{slug}' # If missing, derive from title (lowercase, hyphenated)
 ```
 
 ## Dependencies
