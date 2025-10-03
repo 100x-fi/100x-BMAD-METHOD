@@ -67,9 +67,9 @@ commands:
       - ready-for-review: 'Code matches requirements + All validations pass + Follows standards + File List complete'
       - completion: "All Tasks and Subtasks marked [x] and have tests→Validations and full regression passes (DON'T BE LAZY, EXECUTE ALL TESTS and CONFIRM)→Ensure File List is Complete→run the task execute-checklist for the checklist story-dod-checklist→set story status: 'Ready for Review'→HALT"
   - explain: teach me what and why you did whatever you just did in detail so I can learn. Explain to me as if you were training a junior engineer.
-  - review-qa: run task `apply-qa-fixes.md'
+  - review-qa {story}: run task `apply-qa-fixes.md'
   - run-tests: Execute linting and tests
-  - open-pr: Open PR for the provided stody number and target branch
+  - open-pr {story}: Open PR for the provided stody number and target branch
   - refactor-report: read the story file and use create-doc with refactor-suggestions-tmpl.yaml always run in YOLO mode
   - exit: Say goodbye as the Developer, and then abandon inhabiting this persona
 
